@@ -1,8 +1,13 @@
-"use strict";
-import {App } from './app';
+import {Request, Response} from "express";
 
-/**
- * Start Server
- */
-new App().server.listen(3000);
-console.log('Hello world! From index.ts');
+const express = require('express')
+const app = express()
+const port = 3000
+
+app.get('/', (req: Request, res: Response) => {
+    res.send('Hello World! v1')
+})
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+})
