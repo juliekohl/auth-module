@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
 import * as bodyParser from 'body-parser';
+import { ApiService } from "./application/ApiService";
 
 const express = require('express')
 const app = express()
@@ -14,26 +14,14 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/register', async (req: Request, res: Response) => {
-
     try {
-        const prisma = new PrismaClient();
-        const { name, email, password } = req.body;
-
-        // create User
-        const user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                password,
-            },
+        await (new ApiService()).register({
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
         });
-
-        res.status(201).json({
-            message: 'User created successfully',
-            user
-        });
+        res.status(201).json();
     } catch (err) {
-        console.error('Error creating user:', err);
         res.status(500).json({ error: 'Failed to create user', err });
     }
 });
