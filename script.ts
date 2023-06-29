@@ -2,28 +2,32 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function main() {
+async function createUser(name: string, email: string, password: string) {
     // ... you will write your Prisma Client queries here
     const user = await prisma.user.create({
         data: {
-            name: 'Julie',
-            email: 'Julie@prisma.io',
-            password: 'password',
+            name,
+            email,
+            password,
         },
     });
     console.log('user:', user);
-
-    // retrieve all users records
-    const users = await prisma.user.findMany();
-    console.log('users:', users);
+    return user;
 }
 
-main()
-    .then(async () => {
-        await prisma.$disconnect()
-    })
-    .catch(async (e) => {
-        console.error(e)
-        await prisma.$disconnect()
-        process.exit(1)
-    })
+async function main() {
+    try {
+        const user = await createUser('John Doe', 'john@example.com', 'password');
+        console.log('User created:', user);
+
+        // retrieve all users records
+        const users = await prisma.user.findMany();
+        console.log('users:', users);
+    } catch (error) {
+        console.error('Error creating user:', error);
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
+main();
