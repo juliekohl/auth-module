@@ -1,13 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import {RegisterService} from "../domain/RegisterService";
 
 export class ApiService {
-    private prisma: PrismaClient;
-
-    constructor() {
-        this.prisma = new PrismaClient();
-    }
-
-    async register(data: { name: string, email: string, password: string }) {
-        await this.prisma.user.create({ data });
+    async register(data: { name: string, email: string, password: string }): Promise<void> {
+        await (new RegisterService()).register(data);
     }
 }
